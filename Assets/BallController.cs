@@ -32,6 +32,21 @@ public class BallController : MonoBehaviour
         rb.velocity = new Vector2(-1, 0) * (initialSpeed + speedIncrease * hitCounter);
     }
 
+    private void RestartBall()
+    {   
+        // speed to 0
+        rb.velocity = new Vector2(0, 0);
+
+        // restart origin
+        transform.position = new Vector2(0, 0);
+
+        // reset the hit counter
+        hitCounter = 0;
+
+        // Invoking method with delay of 2 secs
+        Invoke("StartBall", 2f);
+    }
+
     private void PlayerBounce(Transform obj) 
     {
         hitCounter++;
@@ -67,4 +82,15 @@ public class BallController : MonoBehaviour
             PlayerBounce(other.transform);
         }
     } 
+
+    private void OnTriggerEnter2D (Collider2D other)
+    {
+        if (transform.position.x > 0) {
+            RestartBall();
+            opponentText.text = (int.Parse(opponentText.text) + 1).ToString();
+        } else if (transform.position.x < 0) {
+            RestartBall();
+            playerText.text = (int.Parse(playerText.text) + 1).ToString();
+        }
+    }
 }
