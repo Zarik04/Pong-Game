@@ -10,6 +10,12 @@ public class BallController : MonoBehaviour
     public Text playerText;
     public Text opponentText;
 
+    // Game Sounds
+    public AudioClip paddleHitSound;
+    public AudioClip borderHitSound;
+    public AudioClip scoreSound;
+    // public AudioClip backgroundSound;
+
     private int hitCounter;
     private Rigidbody2D rb;
 
@@ -80,15 +86,20 @@ public class BallController : MonoBehaviour
     {
         if (other.gameObject.name == "PaddleA" || other.gameObject.name == "PaddleB") {
             PlayerBounce(other.transform);
+            SoundManager.instance.PlaySound(paddleHitSound);
+        } else {
+            SoundManager.instance.PlaySound(borderHitSound);
         }
     } 
 
     private void OnTriggerEnter2D (Collider2D other)
     {
         if (transform.position.x > 0) {
+            SoundManager.instance.PlaySound(scoreSound);
             RestartBall();
             opponentText.text = (int.Parse(opponentText.text) + 1).ToString();
         } else if (transform.position.x < 0) {
+            SoundManager.instance.PlaySound(scoreSound);
             RestartBall();
             playerText.text = (int.Parse(playerText.text) + 1).ToString();
         }
